@@ -7,7 +7,7 @@
     posipass
 
     # Generate fifty stronger five-word passphrases.
-    posipass -n 50 -w 5
+    posipass --words 5 --gen 50
 
 ## Description
 
