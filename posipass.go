@@ -44,6 +44,8 @@ import (
 	"log"
 	"os"
 	"strings"
+
+	"crypto/rand"
 )
 
 var help = flag.Bool("help", false, "Print help docs")
@@ -59,11 +61,21 @@ func main() {
 		os.Exit(0)
 	}
 
-	var lexicon = "positive-words.txt"
+	var lexiconFile = "positive-words.txt"
 
-	var words = loadWords(lexicon)
+	var lexicon = loadWords(lexiconFile)
 
-	fmt.Println("Loaded", len(words), "words.")
+	fmt.Println("Loaded", len(lexicon), "words.")
+
+	for i := 0; i < *words; i++ {
+		var buf = make([]byte, 1)
+		_, err := rand.Read(buf)
+		if err != nil {
+			log.Fatal(err)
+		}
+		var index = int(buf[0])
+		fmt.Println(index)
+	}
 }
 
 func loadWords(filename string) (words []string) {
@@ -74,7 +86,7 @@ func loadWords(filename string) (words []string) {
 	defer fh.Close()
 	scanner := bufio.NewScanner(fh)
 	for scanner.Scan() {
-		if strings.HasPrefix(scanner.Text(), ";") {
+		if strings.HasPrefix(scanner.Text(), ";") || len(scanner.Text()) < 1 {
 			// Skip.
 		} else {
 			words = append(words, scanner.Text())
