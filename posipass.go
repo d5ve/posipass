@@ -38,9 +38,12 @@ Description
 package main
 
 import (
+	"bufio"
 	"flag"
 	"fmt"
+	"log"
 	"os"
+	"strings"
 )
 
 var help = flag.Bool("help", false, "Print help docs")
@@ -56,4 +59,27 @@ func main() {
 		os.Exit(0)
 	}
 
+	var lexicon = "positive-words.txt"
+
+	var words = loadWords(lexicon)
+
+	fmt.Println("Loaded", len(words), "words.")
+}
+
+func loadWords(filename string) (words []string) {
+	fh, err := os.Open(filename)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer fh.Close()
+	scanner := bufio.NewScanner(fh)
+	for scanner.Scan() {
+		if strings.HasPrefix(scanner.Text(), ";") {
+			// Skip.
+		} else {
+			words = append(words, scanner.Text())
+		}
+	}
+
+	return words
 }
