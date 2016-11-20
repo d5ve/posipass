@@ -49,13 +49,15 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"regexp"
 	"strings"
 
 	"crypto/rand"
+	"math/big"
 )
 
 var help = flag.Bool("help", false, "Print help docs")
-var words = flag.Int("words", 3, "Number of words in each passphrase")
+var numWords = flag.Int("words", 3, "Number of words in each passphrase")
 var gen = flag.Int("gen", 10, "Number of passphrases to generate")
 
 func main() {
@@ -73,15 +75,39 @@ func main() {
 
 	fmt.Println("Loaded", len(lexicon), "words.")
 
-	for i := 0; i < *words; i++ {
-		var buf = make([]byte, 1)
-		_, err := rand.Read(buf)
+	for i := 0; i < *gen; i++ {
+		var phraseWords = generatePassphrase(lexicon, *numWords)
+		printPassphrase(phraseWords)
+	}
+}
+
+func generatePassphrase(lexicon []string, numWords int) (phraseWords []string) {
+
+	for len(phraseWords) < numWords {
+		index, err := rand.Int(rand.Reader, big.NewInt(int64(len(lexicon) - 1)))
 		if err != nil {
 			log.Fatal(err)
 		}
-		var index = int(buf[0])
-		fmt.Println(index)
+		// Every third word in the password needs to contain at least one of aeio
+		// so they can be changes to 4310.
+		if len(phraseWords) % 3 == 2 {
+			matched, err := regexp.MatchString("[aeio]", lexicon[index.Int64()])
+			if err != nil {
+				log.Fatal(err)
+			}
+			if ( matched ) {
+				phraseWords = append(phraseWords, lexicon[index.Int64()])
+			}
+		} else {
+			phraseWords = append(phraseWords, lexicon[index.Int64()])
+		}
 	}
+	return phraseWords
+}
+
+func printPassphrase(words []string) {
+
+	fmt.Println(words)
 }
 
 func loadWords(filename string) (words []string) {
@@ -95,7 +121,7 @@ func loadWords(filename string) (words []string) {
 		if strings.HasPrefix(scanner.Text(), ";") || len(scanner.Text()) < 1 {
 			// Skip.
 		} else {
-			words = append(words, scanner.Text())
+			words = append(words, strings.ToLower(scanner.Text()))
 		}
 	}
 
