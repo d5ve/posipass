@@ -88,8 +88,8 @@ func generatePassphrase(lexicon []string, numWords int) (phraseWords []string) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		// Every third word in the password needs to contain at least one of aeio
-		// so they can be changes to 4310.
+		// Every third word in the password must contain at least one of aeio
+		// so they can be changed to 4310.
 		if len(phraseWords) % 3 == 2 {
 			matched, err := regexp.MatchString("[aeio]", lexicon[index.Int64()])
 			if err != nil {
@@ -105,9 +105,27 @@ func generatePassphrase(lexicon []string, numWords int) (phraseWords []string) {
 	return phraseWords
 }
 
-func printPassphrase(words []string) {
+func printPassphrase(phraseWords []string) {
 
-	fmt.Println(words)
+	var formattedPhrase string
+	for i := 0 ; i < len(phraseWords) ; i ++ {
+		if i % 3           == 0 {
+			formattedPhrase += phraseWords[i]
+		} else if i % 3    == 1 {
+			formattedPhrase += strings.ToUpper(phraseWords[i])
+		} else {
+			var subWord       = phraseWords[i]
+			subWord           = strings.Replace(subWord, "a", "4", -1)
+			subWord           = strings.Replace(subWord, "e", "3", -1)
+			subWord           = strings.Replace(subWord, "i", "1", -1)
+			subWord           = strings.Replace(subWord, "o", "0", -1)
+			formattedPhrase += subWord
+		}
+	}
+	for _, word := range phraseWords {
+		fmt.Printf("%-20s ", word)
+	}
+	fmt.Println(" : " + formattedPhrase)
 }
 
 func loadWords(filename string) (words []string) {
@@ -121,6 +139,7 @@ func loadWords(filename string) (words []string) {
 		if strings.HasPrefix(scanner.Text(), ";") || len(scanner.Text()) < 1 {
 			// Skip.
 		} else {
+			// TODO: Track longest word here. Useful later for pretty printing.
 			words = append(words, strings.ToLower(scanner.Text()))
 		}
 	}
