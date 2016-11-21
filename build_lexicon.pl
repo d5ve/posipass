@@ -28,5 +28,5 @@ while ( my $line = <$in> ) {
     }
 
 }
-print $out "$_\n" for List::Util::uniq(keys %words);
+print $out "$_\n" for sort { $a cmp $b } List::Util::uniq(keys %words);
 
