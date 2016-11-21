@@ -58,9 +58,10 @@ import (
 )
 
 // Commandline flags.
-var help = flag.Bool("help", false, "Print help docs")
-var numWords = flag.Int("words", 3, "Number of words in each passphrase")
 var gen = flag.Int("gen", 10, "Number of passphrases to generate")
+var help = flag.Bool("help", false, "Print help docs")
+var max = flag.Int("max", 12, "Maximum characters in each word")
+var numWords = flag.Int("words", 3, "Number of words in each passphrase")
 
 func main() {
 	flag.Parse()
@@ -73,7 +74,7 @@ func main() {
 
 	var lexiconFile = "sentiwordnet_positive_words.txt"
 
-	var lexicon = loadWords(lexiconFile)
+	var lexicon = loadWords(lexiconFile, *max)
 
 	var perms = math.Pow(float64(len(lexicon)), float64(*numWords))
 	var entropy = math.Log2(perms)
@@ -137,7 +138,7 @@ func printPassphrase(phraseWords []string) {
 
 // loadWords() reads from a single file and returns a filtered array of the
 // words from within.
-func loadWords(filename string) (words []string) {
+func loadWords(filename string, max int) (words []string) {
 	fh, err := os.Open(filename)
 	if err != nil {
 		log.Fatal(err)
@@ -145,7 +146,7 @@ func loadWords(filename string) (words []string) {
 	defer fh.Close()
 	scanner := bufio.NewScanner(fh)
 	for scanner.Scan() {
-		if strings.HasPrefix(scanner.Text(), ";") || len(scanner.Text()) < 1 || len(scanner.Text()) > 12 {
+		if strings.HasPrefix(scanner.Text(), ";") || len(scanner.Text()) < 1 || len(scanner.Text()) > max {
 			// Skip.
 		} else {
 			// TODO: Track longest word here. Useful later for pretty printing.
