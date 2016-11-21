@@ -37,10 +37,7 @@ Description
 
 TODO
 
-	* Larger source lexicon - 2006 words is tiny.
-	* Max length of words in passphrase.
-	  enthusiasticallySTRAIGHTFORWARDtrustw0rth1n3ss is quite a mouthfull.
-	* Print estimated entropy of the generated passwords.
+	* Merge old and new lexicons to increase entropy.
 
 */
 package main
@@ -50,6 +47,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"math"
 	"os"
 	"regexp"
 	"strings"
@@ -72,11 +70,13 @@ func main() {
 		os.Exit(0)
 	}
 
-	var lexiconFile = "positive-words.txt"
+	var lexiconFile = "sentiwordnet_positive_words.txt"
 
 	var lexicon = loadWords(lexiconFile)
 
-	fmt.Println("Loaded", len(lexicon), "words.")
+	var perms = math.Pow(float64(len(lexicon)), float64(*numWords))
+	var entropy = math.Log2(perms)
+	fmt.Printf("Loaded %d words, giving %e permutations of passphrase and an entropy of %d bits.\n", len(lexicon), perms, int(entropy))
 
 	for i := 0; i < *gen; i++ {
 		var phraseWords = generatePassphrase(lexicon, *numWords)
@@ -144,7 +144,7 @@ func loadWords(filename string) (words []string) {
 	defer fh.Close()
 	scanner := bufio.NewScanner(fh)
 	for scanner.Scan() {
-		if strings.HasPrefix(scanner.Text(), ";") || len(scanner.Text()) < 1 {
+		if strings.HasPrefix(scanner.Text(), ";") || len(scanner.Text()) < 1 || len(scanner.Text()) > 12 {
 			// Skip.
 		} else {
 			// TODO: Track longest word here. Useful later for pretty printing.
