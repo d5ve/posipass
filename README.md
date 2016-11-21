@@ -1,5 +1,13 @@
 # PosiPass - Random positive passphrases
 
+## Install
+
+    # Assumes a working golang environment.
+    $ git clone https://github.com/d5ve/posipass.git
+    $ cd posipass
+    $ go install
+    $ $GOPATH/bin/posipass
+
 ## Synopsis
 
 	# Generate ten default three-word passphrases.
