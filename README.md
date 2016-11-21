@@ -3,8 +3,8 @@
 ## Install
 
     # Assumes a working golang environment.
-    $ git clone https://github.com/d5ve/posipass.git
-    $ cd posipass
+    $ go get github.com/d5ve/posipass
+    $ cd $GOPATH/src/github.com/d5ve/posipass
     $ go install
     $ $GOPATH/bin/posipass
 
@@ -14,8 +14,8 @@
 	# In firstSECONDth1rd format.
 	posipass
 
-	# Generate fifty stronger five-word passphrases.
-	posipass --words 5 --gen 50
+	# Generate fifty five-word passphrases, with a max individual word length of 8.
+	posipass --words 5 --gen 50 --max 8
 
 ## Description
 
