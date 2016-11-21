@@ -84,18 +84,18 @@ func main() {
 func generatePassphrase(lexicon []string, numWords int) (phraseWords []string) {
 
 	for len(phraseWords) < numWords {
-		index, err := rand.Int(rand.Reader, big.NewInt(int64(len(lexicon) - 1)))
+		index, err := rand.Int(rand.Reader, big.NewInt(int64(len(lexicon)-1)))
 		if err != nil {
 			log.Fatal(err)
 		}
 		// Every third word in the password must contain at least one of aeio
 		// so they can be changed to 4310.
-		if len(phraseWords) % 3 == 2 {
+		if len(phraseWords)%3 == 2 {
 			matched, err := regexp.MatchString("[aeio]", lexicon[index.Int64()])
 			if err != nil {
 				log.Fatal(err)
 			}
-			if ( matched ) {
+			if matched {
 				phraseWords = append(phraseWords, lexicon[index.Int64()])
 			}
 		} else {
@@ -108,17 +108,17 @@ func generatePassphrase(lexicon []string, numWords int) (phraseWords []string) {
 func printPassphrase(phraseWords []string) {
 
 	var formattedPhrase string
-	for i := 0 ; i < len(phraseWords) ; i ++ {
-		if i % 3           == 0 {
+	for i := 0; i < len(phraseWords); i++ {
+		if i%3 == 0 {
 			formattedPhrase += phraseWords[i]
-		} else if i % 3    == 1 {
+		} else if i%3 == 1 {
 			formattedPhrase += strings.ToUpper(phraseWords[i])
 		} else {
-			var subWord       = phraseWords[i]
-			subWord           = strings.Replace(subWord, "a", "4", -1)
-			subWord           = strings.Replace(subWord, "e", "3", -1)
-			subWord           = strings.Replace(subWord, "i", "1", -1)
-			subWord           = strings.Replace(subWord, "o", "0", -1)
+			var subWord = phraseWords[i]
+			subWord = strings.Replace(subWord, "a", "4", -1)
+			subWord = strings.Replace(subWord, "e", "3", -1)
+			subWord = strings.Replace(subWord, "i", "1", -1)
+			subWord = strings.Replace(subWord, "o", "0", -1)
 			formattedPhrase += subWord
 		}
 	}
