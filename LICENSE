@@ -1,4 +1,14 @@
-This is free and unencumbered software released into the public domain.
+positive-words.txt was downloaded from
+https://www.cs.uic.edu/~liub/FBS/sentiment-analysis.html#lexicon 
+and all rights remain with the authors, Hu and Liu, KDD-2004.
+
+SentiWordNet_3.0.0_20130122.txt was downloaded from
+http://sentiwordnet.isti.cnr.it/ and is distributed under the
+Attribution-ShareAlike 3.0 Unported (CC BY-SA 3.0) license.  It is attributed
+to its authors Andrea Esuli and Fabrizio Sebastiani.
+
+posipass.go and build_lexicon.pl are free and unencumbered software released
+into the public domain.
 
 Anyone is free to copy, modify, publish, use, compile, sell, or
 distribute this software, either in source code form or as a compiled
