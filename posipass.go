@@ -20,7 +20,8 @@ Description
 	uses the standard 'replace vowels with numbers' leetspeek transform. Any
 	further words continue the pattern starting at step 1 again.
 
-	Wordlist from https://www.cs.uic.edu/~liub/FBS/sentiment-analysis.html
+	The wordlists from https://www.cs.uic.edu/~liub/FBS/sentiment-analysis.html
+	and http://sentiwordnet.isti.cnr.it/
 
 	I use these passwords for signing up on various websites, and want to balance
 	the ease of remembering these passwords against their worst-case crackability.
