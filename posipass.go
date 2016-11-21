@@ -40,6 +40,8 @@ TODO
 	* Larger source lexicon - 2006 words is tiny.
 	* Max length of words in passphrase.
 	  enthusiasticallySTRAIGHTFORWARDtrustw0rth1n3ss is quite a mouthfull.
+	* Print estimated entropy of the generated passwords.
+
 */
 package main
 
@@ -56,6 +58,7 @@ import (
 	"math/big"
 )
 
+// Commandline flags.
 var help = flag.Bool("help", false, "Print help docs")
 var numWords = flag.Int("words", 3, "Number of words in each passphrase")
 var gen = flag.Int("gen", 10, "Number of passphrases to generate")
@@ -81,6 +84,8 @@ func main() {
 	}
 }
 
+// generatePassphrase() picks *numWords words, with replacement, from the
+// lexicon, and returns them as an array.
 func generatePassphrase(lexicon []string, numWords int) (phraseWords []string) {
 
 	for len(phraseWords) < numWords {
@@ -105,6 +110,7 @@ func generatePassphrase(lexicon []string, numWords int) (phraseWords []string) {
 	return phraseWords
 }
 
+// printPassphrase() formats, then prints, then prints a passphrase.
 func printPassphrase(phraseWords []string) {
 
 	var formattedPhrase string
@@ -128,6 +134,8 @@ func printPassphrase(phraseWords []string) {
 	fmt.Println(" : " + formattedPhrase)
 }
 
+// loadWords() reads from a single file and returns a filtered array of the
+// words from within.
 func loadWords(filename string) (words []string) {
 	fh, err := os.Open(filename)
 	if err != nil {

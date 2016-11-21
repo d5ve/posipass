@@ -2,12 +2,12 @@
 
 ## Synopsis
 
-    # Generate ten default three-word passphrases.
-    # In firstSECONDth1rd format.
-    posipass
+	# Generate ten default three-word passphrases.
+	# In firstSECONDth1rd format.
+	posipass
 
-    # Generate fifty stronger five-word passphrases.
-    posipass --words 5 --gen 50
+	# Generate fifty stronger five-word passphrases.
+	posipass --words 5 --gen 50
 
 ## Description
 
